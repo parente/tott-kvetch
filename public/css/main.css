@@ -1,0 +1,39 @@
+body {
+    background-color: #2980b9;
+}
+
+.container {
+    padding: 1em;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sheet { 
+    background-color: white;
+    border: 1px solid #2980b9;
+}
+
+.jumbotron {
+    background-color: transparent;
+    margin-bottom: 0;
+}
+
+.post {
+    padding-right: 75px;
+    padding-left: 75px;
+    margin-bottom: 1em;
+}
+
+.post .inner {
+    font-size: 1.2em;
+    background-color: white;
+    padding: 1em 0em;
+    border-top: 1px solid #ddd;
+}
+
+.post .body {
+}
+
+.post .timestamp {
+    color: #999;
+    font-size: 0.75em;
+}

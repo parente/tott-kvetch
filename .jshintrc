@@ -1,0 +1,8 @@
+{
+    "browser" : true,
+    "evil": true,
+    "trailing": true,
+    "sub": true,
+    "undef": true,
+    "devel": true
+}
