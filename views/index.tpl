@@ -18,9 +18,9 @@
 
           <div class="row input-row">
             <!-- input -->
-            <div class="col-lg-6">
+            <div class="col-lg-12">
               <div class="input-group">
-                <input id="input" type="text" class="form-control" maxlength="250">
+                <input id="input" type="text" class="form-control" maxlength="140">
                 <span class="input-group-btn">
                   <button id="submit" class="btn btn-primary" type="button">Vent</button>
                 </span>
@@ -28,17 +28,24 @@
             </div>
           </div>
         </div>
-        <div id="posts" class="posts">
-        </div>
+    
+        <div class="row posts-row">
+          <div class="col-sm-6">
+            <h2>Latest</h2>
+            <div id="latest"></div>
+          </div>
+          <div class="col-sm-6">
+            <h2>Favorites</h2>
+            <div id="favorites"></div>
+          </div>
+        </div>          
       </div>
     </div>
 
     <script type="text/template" id="post-template">
-      <div class="col-lg-6 post">
-        <div class="inner">
-          <div class="body"><%- attributes.body %></div>
-          <div class="timestamp"><%- attributes.timestamp ? new Date(attributes.timestamp).toLocaleString() : '' %></div>
-        </div>
+      <div class="body"><%- attributes.body %></div>
+      <div class="votes"><span class="count"><%- attributes.votes ? attributes.votes : '' %></span> <a class="upvote" href="javascript:">+1</a></div>
+      <div class="timestamp"><%- attributes.timestamp ? new Date(attributes.timestamp).toLocaleString() : '' %>
       </div>
     </script>
 
@@ -48,6 +55,7 @@
     <script src="{{static_path}}/js/models/post.js"></script>
     <script src="{{static_path}}/js/collections/posts.js"></script>
     <script src="{{static_path}}/js/views/post-view.js"></script>
+    <script src="{{static_path}}/js/views/posts-view.js"></script>
     <script src="{{static_path}}/js/views/app-view.js"></script>
     <script src="{{static_path}}/js/main.js"></script>
   </body>

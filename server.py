@@ -21,13 +21,24 @@ def send_static(filename):
     '''
     return static_file(filename, root='public')
 
+@get('/favorites')
+def get_favorites():
+    '''
+    Select posts in the db from highest votes to lowest. Cap at 10.
+    '''
+    rows = conn.execute('''SELECT rowid, body, votes, timestamp FROM posts 
+        ORDER BY votes desc LIMIT 10''')
+    posts = [row for row in rows]
+    response.content_type = 'application/json'
+    return json.dumps(posts)
+
 @get('/posts')
 def get_posts():
     '''
-    Select posts in the db from newest to oldest. Cap at 50.
+    Select posts in the db from newest to oldest. Cap at 10.
     '''
-    rows = conn.execute('''SELECT rowid, body, timestamp FROM posts 
-        ORDER BY timestamp desc LIMIT 50''')
+    rows = conn.execute('''SELECT rowid, body, votes, timestamp FROM posts 
+        ORDER BY timestamp desc LIMIT 10''')
     posts = [row for row in rows]
     response.content_type = 'application/json'
     return json.dumps(posts)
@@ -35,18 +46,37 @@ def get_posts():
 @post('/posts')
 def add_post():
     '''
-    Add a post. 250 chars or less Respond with the post ID and timestamp.
+    Add a post. 140 chars or less Respond with the post ID and timestamp.
     '''
     post = request.json
     c = conn.cursor()
     post['timestamp'] = datetime.datetime.utcnow().isoformat()
-    post['body'] = post['body'][:250]
+    post['body'] = post['body'][:140]
     try:
-        c.execute('INSERT INTO posts(body, timestamp) VALUES (:body, :timestamp)', post)
+        c.execute('INSERT INTO posts(body, votes, timestamp) VALUES (:body, 0, :timestamp)', post)
         conn.commit()
     finally:
         c.close()
-    post['id'] = c.lastrowid
+    post['rowid'] = c.lastrowid
+    response.content_type = 'application/json'
+    return post
+
+@post('/posts/<rowid:int>/upvote')
+def upvote(rowid):
+    '''
+    Increments the vote count for a post. Returns the current vote total.
+    '''
+    c = conn.cursor()
+    post = {}
+    try:
+        c.execute('UPDATE posts SET votes = votes + 1 WHERE rowid = ?', (rowid, ))
+        conn.commit()
+    finally:
+        c.close()
+    rows = conn.execute('SELECT votes FROM posts WHERE rowid = ?', (rowid, ))
+    post['rowid'] = rowid
+    post['votes'] = rows.fetchone()['votes']
+    response.content_type = 'application/json'
     return post
 
 def dict_factory(cursor, row):
@@ -71,7 +101,7 @@ def init_db(name='kvetch.db'):
     if not exists:
         with conn:
             conn.execute('''CREATE TABLE posts
-            (body text, timestamp timestamp)''')
+            (body text, votes int, timestamp timestamp)''')
 
 if __name__ == '__main__':
     init_db()

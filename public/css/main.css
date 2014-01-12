@@ -3,6 +3,7 @@ body {
 }
 
 .container {
+    max-width: 768px; /* or 950px */
     padding: 1em;
     background-color: rgba(255, 255, 255, 0.1);
 }
@@ -13,27 +14,31 @@ body {
 }
 
 .jumbotron {
-    background-color: transparent;
     margin-bottom: 0;
 }
 
-.post {
-    padding-right: 75px;
-    padding-left: 75px;
-    margin-bottom: 1em;
+.posts-row {
+    padding: 30px;
 }
 
-.post .inner {
-    font-size: 1.2em;
-    background-color: white;
+.post {
     padding: 1em 0em;
+    font-size: 1.1em;
+    background-color: white;
     border-top: 1px solid #ddd;
 }
 
 .post .body {
+    padding-bottom: 0.5em;
 }
 
 .post .timestamp {
     color: #999;
     font-size: 0.75em;
+}
+
+.post .votes {
+    color: #999;
+    font-size: 0.75em;
+    float: right ;
 }
